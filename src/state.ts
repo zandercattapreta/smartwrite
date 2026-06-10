@@ -25,6 +25,9 @@ export class SessionState implements SessionStateData {
 	/** Total de palavras escritas nesta sessão */
 	sessionWordCount: number = 0;
 
+	/** Contagem de palavras no momento que a sessão começou (para WPM correto) */
+	wordCountAtSessionStart: number = 0;
+
 	/** Timestamp de quando a sessão iniciou (Date.now()) */
 	sessionStartTime: number = Date.now();
 
@@ -40,10 +43,9 @@ export class SessionState implements SessionStateData {
 	 */
 	reset(): void {
 		this.sessionWordCount = 0;
+		this.wordCountAtSessionStart = 0;
 		this.sessionStartTime = Date.now();
 		this.wpm = 0;
-		// Nota: lastActiveFile é atualizado pelo caller APÓS o reset,
-		// pois o evento file-open fornece o novo arquivo
 	}
 
 	/**

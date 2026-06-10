@@ -64,6 +64,8 @@ export interface SessionStateData {
 	sessionWordCount: number;
 	/** Timestamp em que a sessão iniciou (Date.now()) */
 	sessionStartTime: number;
+	/** Contagem de palavras no momento em que a sessão foi iniciada (baseline para WPM) */
+	wordCountAtSessionStart: number;
 	/** Caminho do último arquivo ativo (TFile.path) */
 	lastActiveFile: string;
 	/** Palavras por minuto calculado na sessão */

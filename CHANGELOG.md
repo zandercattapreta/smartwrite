@@ -10,6 +10,19 @@ Versioning follows [SmartWrite Versioning Convention](https://github.com/zanderc
 
 ---
 
+## [0.1.1] — 2026-06-10
+
+### Corrigido
+
+- **BUG-03** — Stats do painel Write agora calculam ao **abrir** uma nota, não só ao digitar (`vault.read()` nos eventos `file-open`, `active-leaf-change` e ao abrir o painel)
+- **BUG-05** — Persona ativa agora é injetada no `FeedbackView` ao abrir o painel (`syncPersonaToFeedbackView`)
+- **BUG-06** — WPM agora mostra `0` ao abrir uma nota e só começa a contar após 30s **de palavras digitadas nesta sessão** (baseline salvo no `file-open`)
+- **BUG-01** — Notice de 8s ao tentar publicar sem cookie/subdomain configurado (era silencioso)
+- **BUG-02** — Análise Feedback usa persona bundled diretamente (ignora `personasVaultPath` para evitar falha silenciosa)
+- **minificação** — Substituído `instanceof WriteView/FeedbackView` por `getViewType()` (string literal sobrevive ao esbuild)
+
+---
+
 ## [0.1.0] — 2026-06-10
 
 ### Added

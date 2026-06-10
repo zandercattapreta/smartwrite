@@ -78,19 +78,25 @@ export default class SmartWrite extends Plugin {
 		// Registra a extensão CodeMirror de realce
 		this.registerEditorExtension(buildHighlightExtension(this.settings));
 
-		// BUG-03/06 — Atualiza stats ao abrir arquivo (não só no keystroke)
+		// BUG-03/06 — Atualiza stats ao abrir arquivo
 		this.registerEvent(
 			this.app.workspace.on("file-open", (file) => {
 				if (!file) return;
-				// BUG-06 — Reseta sessão ao trocar de arquivo
 				if (file.path !== sessionState.get().lastActiveFile) {
 					sessionState.get().reset();
 					sessionState.update({ lastActiveFile: file.path });
+					// BUG-06: guarda o wordCount inicial para calcular WPM apenas
+					// sobre palavras digitadas nesta sessão (não o total do arquivo)
+					void this.app.vault.read(file).then((text) => {
+						const baseline = this.statsCalculator.countWords(text);
+						sessionState.update({ wordCountAtSessionStart: baseline });
+						this.refreshWriteStats(text);
+					});
+				} else {
+					void this.app.vault.read(file).then((text) => {
+						this.refreshWriteStats(text);
+					});
 				}
-				// Lê via vault.read() pois activeEditor pode ser null quando sidebar tem foco
-				void this.app.vault.read(file).then((text) => {
-					this.refreshWriteStats(text);
-				});
 			}),
 		);
 
@@ -237,7 +243,14 @@ export default class SmartWrite extends Plugin {
 			this.settings.longSentenceThreshold,
 			elapsedMs,
 		);
-		sessionState.update({ wpm: stats.wpm });
+
+		// BUG-06: WPM baseado apenas em palavras digitadas nesta sessão
+		const wordsTyped = Math.max(0, stats.wordCount - state.wordCountAtSessionStart);
+		const wpm = elapsedMs >= 30_000
+			? Math.round(wordsTyped / (elapsedMs / 60_000))
+			: 0;
+		sessionState.update({ wpm });
+		stats.wpm = wpm;
 
 		const problemCount = stats.longSentences.length + stats.repeatedWords.length;
 		for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_WRITE)) {
