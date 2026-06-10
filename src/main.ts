@@ -78,22 +78,37 @@ export default class SmartWrite extends Plugin {
 		// Registra a extensão CodeMirror de realce
 		this.registerEditorExtension(buildHighlightExtension(this.settings));
 
-		// Atualiza stats a cada mudança no editor
+		// BUG-03/06 — Atualiza stats ao abrir arquivo (não só no keystroke)
+		this.registerEvent(
+			this.app.workspace.on("file-open", (file) => {
+				if (!file) return;
+				// BUG-06 — Reseta sessão ao trocar de arquivo
+				if (file.path !== sessionState.get().lastActiveFile) {
+					sessionState.get().reset();
+					sessionState.update({ lastActiveFile: file.path });
+				}
+				// Lê via vault.read() pois activeEditor pode ser null quando sidebar tem foco
+				void this.app.vault.read(file).then((text) => {
+					this.refreshWriteStats(text);
+				});
+			}),
+		);
+
+		// BUG-03 — Atualiza stats ao trocar de aba
+		this.registerEvent(
+			this.app.workspace.on("active-leaf-change", () => {
+				const file = this.app.workspace.getActiveFile();
+				if (!file) return;
+				void this.app.vault.read(file).then((text) => {
+					this.refreshWriteStats(text);
+				});
+			}),
+		);
+
+		// Atualiza stats a cada keystroke
 		this.registerEvent(
 			this.app.workspace.on("editor-change", (editor) => {
-				const text = editor.getValue();
-				const state = sessionState.get();
-				const elapsedMs = Date.now() - state.sessionStartTime;
-				const stats = this.statsCalculator.compute(text, 40, elapsedMs);
-				sessionState.update({ wpm: stats.wpm });
-
-				// Propaga as stats para a WriteView (se aberta)
-				const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_WRITE);
-				for (const leaf of leaves) {
-					if (leaf.view instanceof WriteView) {
-						leaf.view.refresh(stats, 0);
-					}
-				}
+				this.refreshWriteStats(editor.getValue());
 			}),
 		);
 
@@ -136,7 +151,11 @@ export default class SmartWrite extends Plugin {
 		this.addCommand({
 			id: "open-feedback-panel",
 			name: "Abrir painel feedback",
-			callback: async () => { await this.activateView(VIEW_TYPE_FEEDBACK); },
+			callback: async () => {
+				await this.activateView(VIEW_TYPE_FEEDBACK);
+				// BUG-05 — Injeta persona na view após abrir
+				await this.syncPersonaToFeedbackView();
+			},
 		});
 
 		// ---------------------------------------------------------------------------
@@ -175,7 +194,13 @@ export default class SmartWrite extends Plugin {
 			void this.activateView(VIEW_TYPE_WRITE);
 		});
 
-		console.debug("SmartWrite loaded v0.0.1");
+		// Calcula stats para a nota já aberta ao carregar o plugin
+		this.app.workspace.onLayoutReady(() => {
+			const editor = this.app.workspace.activeEditor?.editor;
+			if (editor) this.refreshWriteStats(editor.getValue());
+		});
+
+		console.debug("[SmartWrite] loaded v" + this.manifest.version);
 	}
 
 	onunload(): void {
@@ -200,6 +225,29 @@ export default class SmartWrite extends Plugin {
 	// Write helpers
 	// ---------------------------------------------------------------------------
 
+	/**
+	 * Recalcula stats do texto e propaga para WriteView.
+	 * Chamado em editor-change, file-open e active-leaf-change.
+	 */
+	private refreshWriteStats(text: string): void {
+		const state = sessionState.get();
+		const elapsedMs = Date.now() - state.sessionStartTime;
+		const stats = this.statsCalculator.compute(
+			text,
+			this.settings.longSentenceThreshold,
+			elapsedMs,
+		);
+		sessionState.update({ wpm: stats.wpm });
+
+		const problemCount = stats.longSentences.length + stats.repeatedWords.length;
+		for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_WRITE)) {
+			const view = leaf.view as WriteView;
+			if (leaf.view.getViewType() === VIEW_TYPE_WRITE) {
+				view.refresh(stats, problemCount);
+			}
+		}
+	}
+
 	/** Ativa (ou cria) uma view lateral pelo seu tipo */
 	private async activateView(viewType: string): Promise<void> {
 		const { workspace } = this.app;
@@ -207,19 +255,47 @@ export default class SmartWrite extends Plugin {
 
 		if (existing.length > 0) {
 			void workspace.revealLeaf(existing[0]!);
-			return;
+		} else {
+			const leaf = workspace.getRightLeaf(false);
+			if (!leaf) return;
+			await leaf.setViewState({ type: viewType, active: true });
+			void workspace.revealLeaf(leaf);
 		}
 
-		const leaf = workspace.getRightLeaf(false);
-		if (!leaf) return;
-
-		await leaf.setViewState({ type: viewType, active: true });
-		void workspace.revealLeaf(leaf);
+		// BUG-03 — Propaga stats ao abrir o painel Write
+		// Lê via vault.read() pois activeEditor pode ser null quando a sidebar tem foco
+		if (viewType === VIEW_TYPE_WRITE) {
+			setTimeout(() => {
+				const file = this.app.workspace.getActiveFile();
+				if (file) {
+					void this.app.vault.read(file).then((text) => {
+						this.refreshWriteStats(text);
+					});
+				}
+			}, 100);
+		}
 	}
 
 	// ---------------------------------------------------------------------------
 	// Feedback helpers
 	// ---------------------------------------------------------------------------
+
+	/** Sincroniza a persona ativa para a FeedbackView (BUG-05) */
+	private async syncPersonaToFeedbackView(): Promise<void> {
+		// BUG-02 — Força persona bundled ignorando personasVaultPath
+		// (evita falha silenciosa quando path do vault não tem o formato esperado)
+		const settingsForLoad = { ...this.settings, personasVaultPath: "" };
+		const persona = await this.personaLoader.load(
+			this.settings.activePersona,
+			this.app,
+			settingsForLoad,
+		);
+		for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_FEEDBACK)) {
+			if (leaf.view.getViewType() === VIEW_TYPE_FEEDBACK) {
+				(leaf.view as FeedbackView).setActivePersona(persona);
+			}
+		}
+	}
 
 	/** Dispara análise do texto atual com a persona ativa */
 	private async runAnalysis(): Promise<void> {
@@ -235,18 +311,22 @@ export default class SmartWrite extends Plugin {
 			return;
 		}
 
+		// BUG-05 — Garante persona injetada na view antes de analisar
+		await this.syncPersonaToFeedbackView();
+
 		// Atualiza o estado de "analisando" na FeedbackView
 		for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_FEEDBACK)) {
-			if (leaf.view instanceof FeedbackView) {
-				leaf.view.setAnalyzing(true);
+			if (leaf.view.getViewType() === VIEW_TYPE_FEEDBACK) {
+				(leaf.view as FeedbackView).setAnalyzing(true);
 			}
 		}
 
-		// Carrega a persona ativa e enfileira a análise
+		// BUG-02 — Usa bundled persona diretamente (mesmo fix do syncPersonaToFeedbackView)
+		const settingsForLoad = { ...this.settings, personasVaultPath: "" };
 		const persona = await this.personaLoader.load(
 			this.settings.activePersona,
 			this.app,
-			this.settings,
+			settingsForLoad,
 		);
 		this.analysisQueue.enqueue(text, persona);
 	}
@@ -263,8 +343,13 @@ export default class SmartWrite extends Plugin {
 			return;
 		}
 
+		// BUG-01 — Notice longa (8s) quando configuração ausente
 		if (!this.settings.substackCookie) {
-			new Notice("Configure o cookie do Substack nas settings antes de publicar.");
+			new Notice("SmartWrite: configure o cookie do Substack nas settings antes de publicar.", 8000);
+			return;
+		}
+		if (!this.settings.substackSubdomain) {
+			new Notice("SmartWrite: configure o subdomain do Substack nas settings antes de publicar.", 8000);
 			return;
 		}
 

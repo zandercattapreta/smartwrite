@@ -88,7 +88,9 @@ export class StatsCalculator {
 	 * @returns WPM arredondado (0 se elapsed < 1 segundo)
 	 */
 	calculateWPM(wordCount: number, elapsedMs: number): number {
-		if (elapsedMs < 1000 || wordCount <= 0) return 0;
+		// Exige pelo menos 30s de sessão para evitar valores absurdos
+		// logo após o reset de sessão (file-open)
+		if (elapsedMs < 30_000 || wordCount <= 0) return 0;
 		const minutes = elapsedMs / 60_000;
 		return Math.round(wordCount / minutes);
 	}
