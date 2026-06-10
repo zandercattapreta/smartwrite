@@ -17,7 +17,11 @@
 		"moduleResolution": "bundler",
 		"importHelpers": true,
 		"isolatedModules": true,
-		"lib": ["DOM", "ES5", "ES6", "ES7"]
+		"lib": ["DOM", "ES5", "ES6", "ES7"],
+		"paths": {
+			"@codemirror/view": ["./src/codemirror-view.d.ts"],
+			"@codemirror/state": ["./src/codemirror-state.d.ts"]
+		}
 	},
-	"include": ["src/**/*.ts"]
+	"include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts", "vite.config.ts"]
 }

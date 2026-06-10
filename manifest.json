@@ -1,7 +1,7 @@
 {
 	"id": "smartwrite",
 	"name": "SmartWrite",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"minAppVersion": "1.4.0",
 	"description": "Write, analyze, and publish — all from your Obsidian vault.",
 	"author": "Zander Catta Preta",

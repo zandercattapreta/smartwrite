@@ -4,7 +4,7 @@ Public roadmap. Updated as milestones are reached.
 
 ---
 
-## v0.1.0 — MVP (Target: September 2026)
+## v0.1.0 — MVP
 
 **Theme:** *Clarity feedback + Substack publishing.*
 
@@ -27,11 +27,11 @@ Public roadmap. Updated as milestones are reached.
 - [ ] Automatic image upload to Substack CDN
 - [ ] Frontmatter tracking (URL + publish date)
 - [ ] Publication history log
-- [ ] Draft / scheduled / publish now modes
+- [ ] Draft / publish now modes
 
 ---
 
-## v0.2.0 — Post-MVP (Target: December 2026)
+## v0.2.0 — Post-MVP
 
 **Theme:** *Voice capture + AI detection.*
 
@@ -44,7 +44,7 @@ Public roadmap. Updated as milestones are reached.
 
 ---
 
-## v1.0.0 — Community Release (Target: March 2027)
+## v1.0.0 — Community Release
 
 **Theme:** *Official Obsidian Community Store launch.*
 
@@ -58,7 +58,15 @@ Public roadmap. Updated as milestones are reached.
 
 ## Completed
 
-*Nothing yet — project is in active development.*
+### Infrastructure — Sessão 2026-06-09
+- [x] Plugin scaffold criado (`main.ts`, `package.json`, `tsconfig.json`, `esbuild.config.mjs`, `eslint.config.mts`)
+- [x] Conformidade com Obsidian Plugin Standards auditada e corrigida
+- [x] Ambiente de testes configurado (`vitest` + `vitest.config.ts` + pasta `tests/`)
+- [x] Scripts `test`, `test:watch`, `test:coverage`, `deploy` adicionados ao `package.json`
+- [x] Vault de testes configurado (`Tales from the Breach` — pasta do plugin criada)
+- [x] Skill de Versioning atualizada para plugin único (arquitetura antiga removida)
+- [x] API do Substack mapeada e validada via HAR real (`SUBSTACK_API.md` v2.0)
+- [x] `ARQUITETURA.md` corrigida com dados reais da API
 
 ---
 

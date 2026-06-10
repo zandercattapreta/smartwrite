@@ -6,10 +6,10 @@ import { globalIgnores } from "eslint/config";
 export default tseslint.config(
 	{
 		languageOptions: {
-			globals: { ...globals.browser },
+			globals: { ...globals.browser, ...globals.node },
 			parserOptions: {
 				projectService: {
-					allowDefaultProject: ["eslint.config.js", "manifest.json"],
+					allowDefaultProject: ["eslint.config.js", "manifest.json", "vitest.config.ts"],
 				},
 				tsconfigRootDir: import.meta.dirname,
 				extraFileExtensions: [".json"],
@@ -17,6 +17,20 @@ export default tseslint.config(
 		},
 	},
 	...obsidianmd.configs.recommended,
+	{
+		// Configurações personalizadas do SmartWrite para a regra sentence-case:
+		// Adiciona marcas/produtos reconhecidos como proper nouns (casing preservado).
+		// Deve estar no mesmo objeto que tem o plugin obsidianmd disponível.
+		plugins: { obsidianmd },
+		rules: {
+			"obsidianmd/ui/sentence-case": [
+				"error",
+				{
+					brands: ["Ollama", "Substack", "SmartWrite", "WPM", "ID", "URL", "HTTP", "API", "DevTools", "GET", "POST"],
+				},
+			],
+		},
+	},
 	globalIgnores([
 		"node_modules",
 		"dist",

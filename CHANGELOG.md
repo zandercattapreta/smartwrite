@@ -10,12 +10,39 @@ Versioning follows [SmartWrite Versioning Convention](https://github.com/zanderc
 
 ---
 
-## [Unreleased]
+## [0.1.0] — 2026-06-10
 
-### Planned for v0.1.0
-- Write Module: session stats, daily goal, inline highlights, ribbon indicator
-- Feedback Module: sidebar panel, Ollama integration, `common-reader` + `critical-editor` personas, cadence analysis, async queue
-- Publish Module: Obsidian → Substack, image upload, frontmatter tracking, publication history, draft/scheduled/immediate modes
+### Added
+
+#### Módulo Write
+- `StatsCalculator` — contagem de palavras, chars, leitura (200wpm), WPM, frases longas, palavras repetidas
+- `TextHighlighter` — extensão CodeMirror 6 para highlight inline de frases longas e palavras repetidas
+- `WriteView` — painel lateral com stats em tempo real, meta diária e barra de progresso
+
+#### Módulo Feedback
+- `OllamaClient` — cliente HTTP para Ollama local via `requestUrl` nativo (sem fetch, sem CORS)
+- `PersonaLoader` — personas bundled com fallback para vault (duck typing para testabilidade)
+- `PersonaRunner` — executa persona, faz parse JSON, **nunca** propaga exceção
+- `AnalysisQueue` — fila FIFO concorrência=1, cancel-on-new-request, emite `smartwrite:analysis-ready`
+- `CadenceAnalyzer` — análise rítmica pura: burstiness e frases monótonas
+- `FeedbackView` — painel lateral com resultados por persona, badges de severity, botão "Analisar"
+- Personas bundled: `common-reader` (clareza, engajamento) e `critical-editor` (estrutura, ritmo)
+
+#### Módulo Publish
+- `MarkdownConverter` — Markdown → ProseMirror JSON (formato Substack), função pura sem imports de `obsidian`
+- `SubstackClient` — HTTP client com `connect.sid`, timeout 30s, tratamento 401/403
+- `ImageUploader` — resolve imagens locais (wikilink + path relativo) e faz upload para CDN Substack
+- `FrontmatterWriter` — escreve `substack_url` e `published_at` via `processFrontMatter`
+- `PublicationLog` — log append-only em `smartwrite-log.json`
+- `PublishModal` — modal de confirmação com modo (draft/publish), audiência, aviso de re-publicação
+
+#### Infraestrutura
+- `types.ts` — interfaces centralizadas dos 3 módulos
+- `settings.ts` — SmartWriteSettings completo + SmartWriteSettingTab com aviso de segurança do cookie
+- `state.ts` — SessionState singleton com wrapper get/update
+- `main.ts` — integra os 3 módulos: 3 comandos, 2 views, ribbon
+- 72 testes em 5 suítes (StatsCalculator, CadenceAnalyzer, PersonaLoader, PersonaRunner, MarkdownConverter)
+- Bundle: **29KB** (limite: 500KB)
 
 ---
 

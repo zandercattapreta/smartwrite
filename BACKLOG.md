@@ -40,7 +40,7 @@ Status: `[ ]` Open · `[/]` In Progress · `[x]` Done · `[-]` Cancelled
 | 3.2 | Automatic image upload to Substack CDN | 🔴 High | v0.1 |
 | 3.3 | Frontmatter tracking (URL + publish date) | 🔴 High | v0.1 |
 | 3.4 | Publication history log | 🟡 Medium | v0.1 |
-| 3.5 | Draft / scheduled / publish now modes | 🟡 Medium | v0.1 |
+| 3.5 | Draft / publish now modes | 🟡 Medium | v0.1 |
 | 3.6 | Batch publishing (multiple notes) | 🟢 Low | v0.2 |
 
 ---
@@ -60,12 +60,12 @@ Status: `[ ]` Open · `[/]` In Progress · `[x]` Done · `[-]` Cancelled
 
 | # | Feature | Priority | Version |
 |---|---|---|---|
-| I.1 | Obsidian Plugin Standards compliance (build, lint, tsconfig) | 🔴 High | v0.1 |
-| I.2 | Unit tests with vitest (core functions) | 🔴 High | v0.1 |
-| I.3 | Integration tests (Ollama calls, vault operations) | 🟡 Medium | v0.1 |
-| I.4 | Submission to Obsidian Community Plugin repo | 🔴 High | v1.0 |
-| I.5 | Windows + Linux support | 🟢 Low | v1.0 |
-| I.6 | Guided onboarding (first use) | 🟡 Medium | v1.0 |
+| I.1 | Obsidian Plugin Standards compliance (build, lint, tsconfig) | 🔴 High | v0.1 | `[x]` Concluído 2026-06-09 |
+| I.2 | Unit tests com vitest (core functions) | 🔴 High | v0.1 | `[x]` Concluído 2026-06-09 |
+| I.3 | Integration tests (Ollama calls, vault operations) | 🟡 Medium | v0.1 | `[ ]` |
+| I.4 | Submission to Obsidian Community Plugin repo | 🔴 High | v1.0 | `[ ]` |
+| I.5 | Windows + Linux support | 🟢 Low | v1.0 | `[ ]` |
+| I.6 | Guided onboarding (first use) | 🟡 Medium | v1.0 | `[ ]` |
 
 ---
 
