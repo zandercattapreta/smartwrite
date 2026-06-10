@@ -14,7 +14,7 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
-		"deploy": "npm run build && cp main.js manifest.json styles.css '/Users/zander/Library/CloudStorage/GoogleDrive-zander.cattapreta@zedicoes.com/Shared drives/Z•Edições/~ livros/~ Zander Catta Preta/Zander Catta Preta - Tales from the Breach/.obsidian/plugins/smartwrite/'"
+		"deploy": "npm run build && cp main.js manifest.json styles.css '/Users/zander/Documents/_ coding/_ smartwrite/.obsidian/plugins/smartwrite/'"
 	},
 	"keywords": [
 		"obsidian",

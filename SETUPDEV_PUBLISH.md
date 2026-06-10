@@ -283,7 +283,7 @@ describe("toProseMirror", () => {
 #    Substack Subdomain: casadozander
 #    User ID: 466115474  (do GET /api/v1/user/self)
 
-# 3. Abrir uma nota no vault Tales from the Breach
+# 3. Abrir uma nota no vault local (`_ smartwrite`)
 # 4. Rodar comando "SmartWrite: Publicar no Substack" em modo Draft
 # 5. Verificar no Substack se o draft aparece
 ```
@@ -295,7 +295,7 @@ describe("toProseMirror", () => {
 - [ ] `npm run lint` → 0 erros
 - [ ] `npm run build` → build sem erros
 - [ ] `npm test` → todos os testes de `MarkdownConverter` passando
-- [ ] `npm run deploy` → plugin carregado no vault Tales from the Breach
+- [ ] `npm run deploy` → plugin carregado no vault local (`_ smartwrite`)
 - [ ] Draft criado com sucesso no Substack (verificar em casadozander.substack.com/publish)
 - [ ] Frontmatter da nota tem `substack_url` e `published_at` após publicação
 - [ ] `smartwrite-log.json` tem a entrada da publicação

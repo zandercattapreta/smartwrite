@@ -223,7 +223,7 @@ describe("estimateReadingTime", () => {
 - [ ] `npm run lint` → 0 erros
 - [ ] `npm run build` → build sem erros
 - [ ] `npm test` → todos os testes do `StatsCalculator` passando
-- [ ] `npm run deploy` → plugin carregado no vault Tales from the Breach
+- [ ] `npm run deploy` → plugin carregado no vault local (`_ smartwrite`)
 - [ ] Painel Write abre via comando e via ribbon
 - [ ] Stats atualizam em tempo real enquanto escreve
 - [ ] Highlights aparecem no editor (frases longas, repetições)

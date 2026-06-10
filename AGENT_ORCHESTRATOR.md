@@ -13,7 +13,7 @@
 3. Publica notas diretamente no Substack via API HTTP (Módulo Publish)
 
 **Repositório:** `/Users/zander/Documents/_ coding/_ smartwrite/smartwrite/`
-**Vault de testes:** `Zander Catta Preta - Tales from the Breach` (vault ativo no Obsidian)
+**Vault de testes:** `_ smartwrite` (vault local de desenvolvimento)
 **Obsidian CLI:** `obsidian` — v1.12.7, já habilitado e no PATH
 
 ---
@@ -110,7 +110,7 @@ Execute nesta ordem exata. Não pule etapas.
 
   cd smartwrite && npm run deploy
 
-  Isso copia main.js, manifest.json e styles.css para o vault Tales from the Breach.
+  Isso copia main.js, manifest.json e styles.css para o vault local de desenvolvimento.
 
 ─── 3.3 TESTES DE INTEGRAÇÃO COM OBSIDIAN (CLI oficial) ─
 
@@ -189,7 +189,7 @@ Execute nesta ordem exata. Não pule etapas.
 ─── 3.5 TESTE END-TO-END COMPLETO ──────────────────────
 
   # Abrir nota de teste no vault
-  obsidian open file="Tales from the Breach" vault="Zander Catta Preta - Tales from the Breach"
+  obsidian open vault="_ smartwrite"
 
   # Executar fluxo completo de publicação via eval
   obsidian eval code="
@@ -354,7 +354,7 @@ smartwrite/tests/
 | Dado | Valor |
 |---|---|
 | Plugin ID | `smartwrite` |
-| Vault de testes | `Zander Catta Preta - Tales from the Breach` |
+| Vault de testes | `_ smartwrite` (`/Users/zander/Documents/_ coding/_ smartwrite`) |
 | Substack subdomain | `casadozander` |
 | userId Substack | `466115474` |
 | Modelo Ollama default | `qwen2.5` |

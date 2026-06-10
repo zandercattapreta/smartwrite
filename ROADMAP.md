@@ -6,15 +6,17 @@ Public roadmap. Updated as milestones are reached.
 
 ## v0.1.0 — MVP
 
-**Theme:** *Clarity feedback + Substack publishing.*
+**Theme:** _Clarity feedback + Substack publishing._
 
 ### Write Module
+
 - [ ] Session stats: words, characters, reading time, WPM
 - [ ] Daily word goal with progress indicator
 - [ ] Inline highlights: repeated words, long sentences, passive voice
 - [ ] Subtle ribbon indicator when feedback is available
 
 ### Feedback Module
+
 - [ ] Sidebar panel with passages where readers get lost
 - [ ] Ollama integration (local, offline, Apple Silicon)
 - [ ] Active personas: `common-reader` + `critical-editor`
@@ -23,6 +25,7 @@ Public roadmap. Updated as milestones are reached.
 - [ ] Analyze full document or selection
 
 ### Publish Module
+
 - [ ] Obsidian → Substack publishing
 - [ ] Automatic image upload to Substack CDN
 - [ ] Frontmatter tracking (URL + publish date)
@@ -33,7 +36,7 @@ Public roadmap. Updated as milestones are reached.
 
 ## v0.2.0 — Post-MVP
 
-**Theme:** *Voice capture + AI detection.*
+**Theme:** _Voice capture + AI detection._
 
 - [ ] Voice recording via whisper.cpp (offline, MIT)
 - [ ] Auto-transcription → new note in vault
@@ -46,7 +49,7 @@ Public roadmap. Updated as milestones are reached.
 
 ## v1.0.0 — Community Release
 
-**Theme:** *Official Obsidian Community Store launch.*
+**Theme:** _Official Obsidian Community Store launch._
 
 - [ ] Approved in Obsidian Community Plugin repository
 - [ ] Full documentation (README, FAQ, CONTRIBUTING, Wiki)
@@ -59,11 +62,12 @@ Public roadmap. Updated as milestones are reached.
 ## Completed
 
 ### Infrastructure — Sessão 2026-06-09
+
 - [x] Plugin scaffold criado (`main.ts`, `package.json`, `tsconfig.json`, `esbuild.config.mjs`, `eslint.config.mts`)
 - [x] Conformidade com Obsidian Plugin Standards auditada e corrigida
 - [x] Ambiente de testes configurado (`vitest` + `vitest.config.ts` + pasta `tests/`)
 - [x] Scripts `test`, `test:watch`, `test:coverage`, `deploy` adicionados ao `package.json`
-- [x] Vault de testes configurado (`Tales from the Breach` — pasta do plugin criada)
+- [x] Vault de testes configurado (`_ smartwrite` — `/Users/zander/Documents/_ coding/_ smartwrite`)
 - [x] Skill de Versioning atualizada para plugin único (arquitetura antiga removida)
 - [x] API do Substack mapeada e validada via HAR real (`SUBSTACK_API.md` v2.0)
 - [x] `ARQUITETURA.md` corrigida com dados reais da API

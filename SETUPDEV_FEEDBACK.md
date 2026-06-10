@@ -11,6 +11,7 @@
 O Módulo Feedback analisa o texto com IA local (Ollama) e indica onde o leitor vai se perder. Roda em background — nunca bloqueia a escrita. Usa personas para dar perspectivas diferentes ao texto.
 
 **Do ponto de vista do usuário:**
+
 > Clica em "Analisar". O painel lateral mostra passagens problemáticas com a perspectiva de um leitor comum e de um editor crítico. A análise roda enquanto continua escrevendo — sem loading spinner bloqueante.
 
 ---
@@ -68,7 +69,7 @@ Ao analisar o texto, identifique:
 
 Responda em JSON com esta estrutura:
 [{"excerpt": "trecho exato", "issue": "descrição do problema", "severity": "low|medium|high"}]
-`.trim();
+`.trim()
 ```
 
 ### `src/personas/critical-editor.ts`
@@ -87,12 +88,13 @@ Ao analisar o texto, identifique:
 
 Responda em JSON com esta estrutura:
 [{"excerpt": "trecho exato", "issue": "descrição do problema", "severity": "low|medium|high"}]
-`.trim();
+`.trim()
 ```
 
 ---
 
 ### `src/modules/feedback/OllamaClient.ts`
+
 HTTP client para o Ollama local. Sem dependência de `axios` ou similar — `fetch` nativo.
 
 ```typescript
@@ -115,6 +117,7 @@ async checkHealth(): Promise<boolean>  // GET /api/version → true se 200
 ---
 
 ### `src/modules/feedback/PersonaLoader.ts`
+
 Duas camadas: vault (prioridade) → bundled (fallback).
 
 ```typescript
@@ -128,7 +131,8 @@ async load(personaId: string, app: App, settings: SmartWriteSettings): Promise<P
 ```
 
 Formato esperado no vault:
-```markdown
+
+````markdown
 ---
 id: common-reader
 nome: Common Reader
@@ -139,7 +143,9 @@ nome: Common Reader
 ```text
 [conteúdo do system prompt]
 ```
-```
+````
+
+````
 
 ---
 
@@ -154,13 +160,14 @@ Orquestra a execução de uma persona em um texto.
 // 5. Retorna FeedbackResult[] (vazio se parse falhar — never throw)
 
 async run(text: string, persona: Persona, model: string): Promise<FeedbackResult[]>
-```
+````
 
 > **Regra:** Se a resposta do Ollama não for JSON válido, retorna `[]` e loga o erro. Nunca propaga exceção para o usuário como resultado de falha de parse.
 
 ---
 
 ### `src/modules/feedback/AnalysisQueue.ts`
+
 Fila assíncrona. Garante que a escrita nunca trava enquanto a IA processa.
 
 ```typescript
@@ -176,6 +183,7 @@ isRunning(): boolean
 ---
 
 ### `src/modules/feedback/CadenceAnalyzer.ts`
+
 Análise rítmica **sem IA**. Funções puras testáveis.
 
 ```typescript
@@ -191,6 +199,7 @@ identifyMonotonousBlocks(text: string): Range[]  // blocos com burstiness < 0.3
 ---
 
 ### `src/modules/feedback/FeedbackView.ts`
+
 `ItemView` do painel lateral.
 
 ```typescript
@@ -207,6 +216,7 @@ identifyMonotonousBlocks(text: string): Range[]  // blocos com burstiness < 0.3
 ### Expansão do `main.ts`
 
 Adicionar no `onload()`:
+
 ```typescript
 // 1. Instanciar OllamaClient com settings.ollamaUrl
 // 2. Instanciar PersonaLoader
@@ -248,24 +258,24 @@ Criar em `tests/feedback/`:
 
 ```typescript
 // CadenceAnalyzer.test.ts
-describe("calculateBurstiness", () => {
-  it("retorna valor alto para texto com frases variadas")
-  it("retorna valor baixo para texto com frases uniformes")
-  it("retorna 0 para texto vazio")
+describe('calculateBurstiness', () => {
+    it('retorna valor alto para texto com frases variadas')
+    it('retorna valor baixo para texto com frases uniformes')
+    it('retorna 0 para texto vazio')
 })
 
 // PersonaLoader.test.ts (mock do vault)
-describe("PersonaLoader", () => {
-  it("retorna persona bundled quando vaultPath está vazio")
-  it("retorna persona bundled quando arquivo do vault não existe")
-  it("prioriza persona do vault quando arquivo existe e é válido")
+describe('PersonaLoader', () => {
+    it('retorna persona bundled quando vaultPath está vazio')
+    it('retorna persona bundled quando arquivo do vault não existe')
+    it('prioriza persona do vault quando arquivo existe e é válido')
 })
 
 // PersonaRunner.test.ts (mock do OllamaClient)
-describe("PersonaRunner", () => {
-  it("retorna [] quando Ollama retorna JSON inválido")
-  it("parseia corretamente resposta JSON válida")
-  it("nunca propaga exceção")
+describe('PersonaRunner', () => {
+    it('retorna [] quando Ollama retorna JSON inválido')
+    it('parseia corretamente resposta JSON válida')
+    it('nunca propaga exceção')
 })
 ```
 
@@ -278,7 +288,7 @@ describe("PersonaRunner", () => {
 - [ ] `npm run lint` → 0 erros
 - [ ] `npm run build` → build sem erros
 - [ ] `npm test` → testes de `CadenceAnalyzer`, `PersonaLoader`, `PersonaRunner` passando
-- [ ] `npm run deploy` → plugin carregado no vault Tales from the Breach
+- [ ] `npm run deploy` → plugin carregado no vault local (`_ smartwrite`)
 - [ ] `OllamaClient.checkHealth()` → `true` com Ollama rodando
 - [ ] Análise completa de um texto real no vault de testes (com `qwen2.5`)
 - [ ] Painel Feedback exibe resultados agrupados por persona
@@ -290,13 +300,13 @@ describe("PersonaRunner", () => {
 
 ## Restrições
 
-| Restrição | Valor |
-|---|---|
-| Sem chamadas de IA externas (OpenAI, Gemini, etc.) | Ollama local apenas |
-| Timeout do Ollama | 60s |
-| Concorrência da fila | 1 análise por vez |
-| Sem `axios` ou `node-fetch` | `fetch` nativo do Obsidian |
-| `CadenceAnalyzer` sem imports externos | Funções puras TypeScript |
+| Restrição                                          | Valor                      |
+| -------------------------------------------------- | -------------------------- |
+| Sem chamadas de IA externas (OpenAI, Gemini, etc.) | Ollama local apenas        |
+| Timeout do Ollama                                  | 60s                        |
+| Concorrência da fila                               | 1 análise por vez          |
+| Sem `axios` ou `node-fetch`                        | `fetch` nativo do Obsidian |
+| `CadenceAnalyzer` sem imports externos             | Funções puras TypeScript   |
 
 ---
 
