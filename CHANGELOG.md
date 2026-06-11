@@ -10,6 +10,20 @@ Versioning follows [SmartWrite Versioning Convention](https://github.com/zanderc
 
 ---
 
+## [0.1.2] — 2026-06-11
+
+### UI
+
+- **styles.css** — CSS completo implementado (estava vazio desde o início): painel Write, highlights inline e badge ribbon
+- **Painel Write** — labels e valores separados (`Palavras 699`, não `Words699`); painel em português
+- **WPM** — campo some quando = 0 (não exibe `WPM 0` ao abrir uma nota)
+- **Meta do dia** — barra de progresso visível com cor de destaque do tema
+- **Issues** — botão clicável `"N pontos de atenção — ver no Feedback"` que abre o painel Feedback; some quando não há issues
+- **Highlights inline** — sublinhado amarelo para frases longas, laranja para palavras repetidas (eram invisíveis sem CSS)
+- **Badge ribbon** — contador numérico sobre o ícone de lápis quando há issues no documento ativo
+
+---
+
 ## [0.1.1] — 2026-06-10
 
 ### Corrigido

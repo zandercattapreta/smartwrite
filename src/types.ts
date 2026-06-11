@@ -220,3 +220,11 @@ export interface OllamaRequest {
 	system: string;
 	stream: boolean;
 }
+
+/** Opções selecionadas pelo usuário no modal de publicação */
+export interface PublishOptions {
+	/** Modo de publicação */
+	mode: "draft" | "publish";
+	/** Audiência do post */
+	audience: "everyone" | "only_paid" | "only_free";
+}

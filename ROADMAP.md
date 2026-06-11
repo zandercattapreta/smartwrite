@@ -4,37 +4,39 @@ Public roadmap. Updated as milestones are reached.
 
 ---
 
-## v0.1.0 — MVP
+## v0.1.0 — In Progress
 
 **Theme:** _Clarity feedback + Substack publishing._
 
 ### Write Module
 
-- [ ] Session stats: words, characters, reading time, WPM
-- [ ] Daily word goal with progress indicator
-- [ ] Inline highlights: repeated words, long sentences, passive voice
+- [x] Session stats: words, characters, reading time, WPM
+- [x] Daily word goal with progress indicator
+- [x] Inline highlights: repeated words, long sentences
+- [ ] Passive voice detection (inline highlight)
 - [ ] Subtle ribbon indicator when feedback is available
+- [ ] Readable Write panel UI (legible label/value layout)
 
 ### Feedback Module
 
-- [ ] Sidebar panel with passages where readers get lost
-- [ ] Ollama integration (local, offline, Apple Silicon)
-- [ ] Active personas: `common-reader` + `critical-editor`
-- [ ] Rhythm and cadence analysis (burstiness)
-- [ ] Async analysis queue
-- [ ] Analyze full document or selection
+- [x] Sidebar panel with passages where readers get lost
+- [x] Ollama integration (local, offline, Apple Silicon)
+- [x] Active personas: `common-reader` + `critical-editor`
+- [x] Rhythm and cadence analysis (burstiness)
+- [x] Async analysis queue
+- [x] Analyze full document or selection
 
 ### Publish Module
 
-- [ ] Obsidian → Substack publishing
-- [ ] Automatic image upload to Substack CDN
-- [ ] Frontmatter tracking (URL + publish date)
-- [ ] Publication history log
-- [ ] Draft / publish now modes
+- [x] Obsidian → Substack publishing
+- [x] Automatic image upload to Substack CDN
+- [x] Frontmatter tracking (URL + publish date)
+- [x] Publication history log
+- [x] Draft / publish now modes
 
 ---
 
-## v0.2.0 — Post-MVP
+## v0.2.0
 
 **Theme:** _Voice capture + AI detection._
 
@@ -44,6 +46,7 @@ Public roadmap. Updated as milestones are reached.
 - [ ] DETECT-AI: identify LLM artifacts in text
 - [ ] Additional personas beyond the core set
 - [ ] Batch publishing (multiple notes)
+- [ ] Passive voice detection (moved from v0.1.0)
 
 ---
 
@@ -60,6 +63,15 @@ Public roadmap. Updated as milestones are reached.
 ---
 
 ## Completed
+
+### v0.1.0 Core — Sessão 2026-06-10
+
+- [/] Write module: `StatsCalculator`, `TextHighlighter`, `WriteView` — código existe, DoD pendente
+- [/] Feedback module: `OllamaClient`, `PersonaLoader`, `PersonaRunner`, `AnalysisQueue`, `CadenceAnalyzer`, `FeedbackView` — código existe, DoD pendente
+- [/] Publish module: `SubstackClient`, `MarkdownConverter`, `ImageUploader`, `FrontmatterWriter`, `PublicationLog`, `PublishModal` — código existe, DoD pendente
+- [/] Bundled personas: `common-reader` + `critical-editor` — código existe, DoD pendente
+- [x] Settings: todos os campos dos 3 módulos configuráveis via SettingTab
+- [x] Agent skills criados: `dod`, `smartwrite-context`, `ollama-integration`, `persona-system`, `substack-api`, `testing-protocol`
 
 ### Infrastructure — Sessão 2026-06-09
 

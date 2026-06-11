@@ -25,7 +25,7 @@ export class WriteView extends ItemView {
 	private readonly sessionState: SessionState;
 
 	/** Último StatsResult recebido — null antes do primeiro cálculo */
-	private lastStats: StatsResult | null = null;
+	lastStats: StatsResult | null = null;
 
 	/** Meta diária de palavras (recebida das settings) */
 	private dailyWordGoal: number;
@@ -33,10 +33,19 @@ export class WriteView extends ItemView {
 	/** Número de problemas encontrados no último scan */
 	private problemCount: number = 0;
 
-	constructor(leaf: WorkspaceLeaf, sessionState: SessionState, dailyWordGoal: number) {
+	/** Callback para abrir o painel Feedback ao clicar no botão de issues */
+	private readonly onOpenFeedback: () => void;
+
+	constructor(
+		leaf: WorkspaceLeaf,
+		sessionState: SessionState,
+		dailyWordGoal: number,
+		onOpenFeedback: () => void,
+	) {
 		super(leaf);
 		this.sessionState = sessionState;
 		this.dailyWordGoal = dailyWordGoal;
+		this.onOpenFeedback = onOpenFeedback;
 	}
 
 	/** Identificador único da view */
@@ -84,39 +93,50 @@ export class WriteView extends ItemView {
 		const container = this.containerEl.children[1];
 		if (!container) return;
 
-		// Limpa o conteúdo anterior
 		container.empty();
 
-		// --- Stats do documento ---
-		const statsSection = container.createEl("div", { cls: "sw-write-stats" });
-
-		if (this.lastStats) {
-			const s = this.lastStats;
-
-			// Palavras totais
-			const readTime = s.readingTimeMin === 0
-				? "< 1 min"
-				: `${s.readingTimeMin} min`;
-			this.createStatRow(statsSection, "Words", String(s.wordCount));
-			this.createStatRow(statsSection, "Reading time", readTime);
-			this.createStatRow(statsSection, "Characters", String(s.charCount));
-		} else {
-			statsSection.createEl("p", {
-				text: "Open a note to see statistics.",
+		if (!this.lastStats) {
+			// --- Estado vazio ---
+			const emptySection = container.createEl("div", { cls: "sw-write-stats" });
+			emptySection.createEl("p", {
+				text: "Abra uma nota para ver as estatísticas.",
 				cls: "sw-write-empty",
 			});
+			return;
 		}
+
+		const s = this.lastStats;
+
+		// --- Estatísticas do documento ---
+		const statsSection = container.createEl("div", { cls: "sw-write-stats" });
+
+		const readTime = s.readingTimeMin === 0
+			? "< 1 min"
+			: `${s.readingTimeMin} min`;
+
+		this.createStatRow(statsSection, "Palavras", String(s.wordCount));
+		this.createStatRow(statsSection, "Leitura", readTime);
+		this.createStatRow(statsSection, "Caracteres", String(s.charCount));
 
 		// --- Estatísticas de sessão ---
 		const sessionSection = container.createEl("div", { cls: "sw-write-session" });
 
-		this.createStatRow(sessionSection, "WPM", String(this.sessionState.wpm));
+		// WPM só aparece quando há dados reais (após 30s de digitação)
+		if (this.sessionState.wpm > 0) {
+			this.createStatRow(sessionSection, "Velocidade", `${this.sessionState.wpm} wpm`);
+		}
 
-		// Progresso em relação à meta diária
+		// Meta diária com porcentagem separada
 		const goal = this.dailyWordGoal;
-		const current = this.lastStats?.wordCount ?? 0;
+		const current = s.wordCount;
 		const progress = goal > 0 ? Math.min(100, Math.round((current / goal) * 100)) : 0;
-		this.createStatRow(sessionSection, "Daily goal", `${current} / ${goal} (${progress}%)`);
+
+		const goalRow = sessionSection.createEl("div", { cls: "sw-stat-row" });
+		goalRow.createEl("span", { text: "Meta do dia", cls: "sw-stat-label" });
+
+		const goalValueEl = goalRow.createEl("span", { cls: "sw-stat-value" });
+		goalValueEl.appendText(`${current} / ${goal} `);
+		goalValueEl.createEl("span", { text: `(${progress}%)`, cls: "sw-goal-pct" });
 
 		// Barra de progresso visual
 		const progressBar = sessionSection.createEl("div", { cls: "sw-progress-bar" });
@@ -125,14 +145,18 @@ export class WriteView extends ItemView {
 			attr: { style: `width: ${progress}%` },
 		});
 
-		// --- Problemas encontrados ---
+		// --- Issues: botão que abre o painel Feedback ---
 		if (this.problemCount > 0) {
 			const alertSection = container.createEl("div", { cls: "sw-write-alert" });
-			const label = this.problemCount === 1 ? "issue found" : "issues found";
-			alertSection.createEl("span", {
-				text: `${this.problemCount} ${label}`,
-				cls: "sw-alert-text",
+			const label = this.problemCount === 1
+				? "1 ponto de atenção — ver no Feedback"
+				: `${this.problemCount} pontos de atenção — ver no Feedback`;
+
+			const btn = alertSection.createEl("button", {
+				text: label,
+				cls: "sw-alert-btn",
 			});
+			btn.addEventListener("click", () => { this.onOpenFeedback(); });
 		}
 	}
 

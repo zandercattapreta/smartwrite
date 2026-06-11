@@ -7,41 +7,43 @@ Status: `[ ]` Open · `[/]` In Progress · `[x]` Done · `[-]` Cancelled
 
 ## Module 1 — Write
 
-| # | Feature | Priority | Version |
-|---|---|---|---|
-| 1.1 | Session stats (words, chars, reading time, WPM) | 🔴 High | v0.1 |
-| 1.2 | Daily word goal with progress indicator | 🔴 High | v0.1 |
-| 1.3 | Inline highlights: repeated words, long sentences, passive voice | 🔴 High | v0.1 |
-| 1.4 | Subtle ribbon indicator when feedback is available | 🟡 Medium | v0.1 |
+| # | Feature | Priority | Version | Status |
+|---|---|---|---|---|
+| 1.1 | Session stats (words, chars, reading time, WPM) | 🔴 High | v0.1 | `[/]` In Progress |
+| 1.2 | Daily word goal with progress bar | 🔴 High | v0.1 | `[/]` In Progress |
+| 1.3 | Inline highlights: repeated words + long sentences | 🔴 High | v0.1 | `[/]` In Progress |
+| 1.4 | Subtle ribbon badge when feedback is available | 🔴 High | v0.1 | `[ ]` Pendente |
+| 1.5 | Readable panel UI (label · value spacing, WPM context, issues link) | 🔴 High | v0.1 | `[ ]` Pendente |
+| 1.6 | Passive voice detection (inline highlight) | 🟡 Medium | v0.2 | `[ ]` Pendente |
 
 ---
 
 ## Module 2 — Feedback
 
-| # | Feature | Priority | Version |
-|---|---|---|---|
-| 2.1 | Sidebar panel — passages where readers get lost | 🔴 High | v0.1 |
-| 2.2 | Rhythm and cadence analysis (burstiness) | 🔴 High | v0.1 |
-| 2.3 | Persona feedback — `common-reader` + `critical-editor` | 🔴 High | v0.1 |
-| 2.4 | Async analysis queue | 🔴 High | v0.1 |
-| 2.5 | Analyze full document or selected passage | 🟡 Medium | v0.1 |
-| 2.6 | Ollama integration (local, offline) | 🔴 High | v0.1 |
-| 2.7 | DETECT-AI: identify LLM artifacts in text | 🟡 Medium | v0.2 |
-| 2.8 | Additional personas (beyond core set) | 🟢 Low | v0.2 |
-| 2.9 | Historical clarity analysis (track evolution over sessions) | 🟢 Low | v0.2 |
+| # | Feature | Priority | Version | Status |
+|---|---|---|---|---|
+| 2.1 | Sidebar panel — passages where readers get lost | 🔴 High | v0.1 | `[/]` In Progress |
+| 2.2 | Rhythm and cadence analysis (burstiness) | 🔴 High | v0.1 | `[/]` In Progress |
+| 2.3 | Persona feedback — `common-reader` + `critical-editor` | 🔴 High | v0.1 | `[/]` In Progress |
+| 2.4 | Async analysis queue | 🔴 High | v0.1 | `[/]` In Progress |
+| 2.5 | Analyze full document or selected passage | 🟡 Medium | v0.1 | `[/]` In Progress |
+| 2.6 | Ollama integration (local, offline) | 🔴 High | v0.1 | `[/]` In Progress |
+| 2.7 | DETECT-AI: identify LLM artifacts in text | 🟡 Medium | v0.2 | `[ ]` Pendente |
+| 2.8 | Additional personas (beyond core set) | 🟢 Low | v0.2 | `[ ]` Pendente |
+| 2.9 | Historical clarity analysis (track evolution over sessions) | 🟢 Low | v0.2 | `[ ]` Pendente |
 
 ---
 
 ## Module 3 — Publish
 
-| # | Feature | Priority | Version |
-|---|---|---|---|
-| 3.1 | Obsidian → Substack publishing | 🔴 High | v0.1 |
-| 3.2 | Automatic image upload to Substack CDN | 🔴 High | v0.1 |
-| 3.3 | Frontmatter tracking (URL + publish date) | 🔴 High | v0.1 |
-| 3.4 | Publication history log | 🟡 Medium | v0.1 |
-| 3.5 | Draft / publish now modes | 🟡 Medium | v0.1 |
-| 3.6 | Batch publishing (multiple notes) | 🟢 Low | v0.2 |
+| # | Feature | Priority | Version | Status |
+|---|---|---|---|---|
+| 3.1 | Obsidian → Substack publishing | 🔴 High | v0.1 | `[/]` In Progress |
+| 3.2 | Automatic image upload to Substack CDN | 🔴 High | v0.1 | `[/]` In Progress |
+| 3.3 | Frontmatter tracking (URL + publish date) | 🔴 High | v0.1 | `[/]` In Progress |
+| 3.4 | Publication history log | 🟡 Medium | v0.1 | `[/]` In Progress |
+| 3.5 | Draft / publish now modes | 🟡 Medium | v0.1 | `[/]` In Progress |
+| 3.6 | Batch publishing (multiple notes) | 🟢 Low | v0.2 | `[ ]` Pendente |
 
 ---
 

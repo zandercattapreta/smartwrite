@@ -2,7 +2,7 @@
 // SCRIPT: PublishModal.ts
 // DESCRIÇÃO: Modal de confirmação antes de publicar no Substack
 // CHAMADO POR: main.ts (comando "SmartWrite: Publicar no Substack")
-// TRAZ (CHAMA/IMPORTA): obsidian (App, Modal, Setting, Notice)
+// TRAZ (CHAMA/IMPORTA): obsidian (App, Modal, Setting, Notice), types.ts (PublishOptions)
 // CONTRATO (RESPOSTA ESPERADA):
 //   Modal exibe: título da nota, seleção de modo (draft/publish), audiência
 //   Aviso se nota já foi publicada (tem substack_url no frontmatter)
@@ -11,14 +11,8 @@
 
 import { App, Modal, Notice, Setting } from "obsidian";
 import type { TFile } from "obsidian";
+import type { PublishOptions } from "../../types";
 
-/** Opções selecionadas pelo usuário no modal de publicação */
-export interface PublishOptions {
-	/** Modo de publicação */
-	mode: "draft" | "publish";
-	/** Audiência do post */
-	audience: "everyone" | "only_paid" | "only_free";
-}
 
 /**
  * Modal de confirmação de publicação no Substack.

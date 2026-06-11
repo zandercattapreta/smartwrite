@@ -44,6 +44,8 @@ export default class SmartWrite extends Plugin {
 	// --- Módulo Write
 	private statsCalculator!: StatsCalculator;
 	private writeViewRegistered = false;
+	/** Elemento da ribbon — usado para adicionar/remover o badge de issues */
+	private ribbonIconEl!: HTMLElement;
 
 	// --- Módulo Feedback
 	private ollamaClient!: OllamaClient;
@@ -72,7 +74,13 @@ export default class SmartWrite extends Plugin {
 
 		// Registra a view do painel Write
 		this.registerView(VIEW_TYPE_WRITE, (leaf: WorkspaceLeaf) =>
-			new WriteView(leaf, sessionState.get(), this.settings.dailyWordGoal)
+			new WriteView(
+				leaf,
+				sessionState.get(),
+				this.settings.dailyWordGoal,
+				// Callback: abre painel Feedback ao clicar no botão de issues
+				() => { void this.activateView(VIEW_TYPE_FEEDBACK); },
+			)
 		);
 
 		// Registra a extensão CodeMirror de realce
@@ -196,7 +204,7 @@ export default class SmartWrite extends Plugin {
 		// ---------------------------------------------------------------------------
 		// 5. Ribbon
 		// ---------------------------------------------------------------------------
-		this.addRibbonIcon("pencil", "SmartWrite: abrir write", () => {
+		this.ribbonIconEl = this.addRibbonIcon("pencil", "SmartWrite: abrir write", () => {
 			void this.activateView(VIEW_TYPE_WRITE);
 		});
 
@@ -258,6 +266,23 @@ export default class SmartWrite extends Plugin {
 			if (leaf.view.getViewType() === VIEW_TYPE_WRITE) {
 				view.refresh(stats, problemCount);
 			}
+		}
+		// Atualiza o badge na ribbon
+		this.updateRibbonBadge(problemCount);
+	}
+
+	/**
+	 * Atualiza o badge numérico sobre o ícone da ribbon.
+	 * Mostra o número de issues quando > 0, remove o badge quando 0.
+	 */
+	private updateRibbonBadge(count: number): void {
+		if (!this.ribbonIconEl) return;
+		if (count > 0) {
+			this.ribbonIconEl.setAttribute("data-badge", String(count > 99 ? "99+" : count));
+			this.ribbonIconEl.addClass("sw-ribbon-has-badge");
+		} else {
+			this.ribbonIconEl.removeAttribute("data-badge");
+			this.ribbonIconEl.removeClass("sw-ribbon-has-badge");
 		}
 	}
 
