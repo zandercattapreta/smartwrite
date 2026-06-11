@@ -18,3 +18,7 @@ main.js.map
 # Editor
 .vscode/
 _temp/
+
+# Agent/AI internal docs — not part of public plugin
+AGENT_ORCHESTRATOR.md
+SETUPDEV_*.md
