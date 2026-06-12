@@ -79,8 +79,8 @@ export class FeedbackView extends ItemView {
 	async onOpen(): Promise<void> {
 		// Inscreve no evento de análise completa
 		this.registerEvent(
-			(this.app.workspace as unknown as Events).on(EVENT_ANALYSIS_READY, (results: FeedbackResult[]) => {
-				this.results = results;
+			(this.app.workspace as unknown as Events).on(EVENT_ANALYSIS_READY, (...args: unknown[]) => {
+				this.results = args[0] as FeedbackResult[];
 				this.isAnalyzing = false;
 				this.render();
 			}),

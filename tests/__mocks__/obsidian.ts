@@ -4,6 +4,15 @@
  * Localização: tests/__mocks__/obsidian.ts
  */
 
+/** normalizePath — limpa separadores e remove barras duplicadas/iniciais/finais */
+export function normalizePath(path: string): string {
+	return path
+		.replace(/\\/g, "/")
+		.replace(/\/+/g, "/")
+		.replace(/^\/|\/$/g, "")
+		.normalize();
+}
+
 /** parseYaml — usa js-yaml via polyfill simples (apenas frontmatter básico) */
 export function parseYaml(text: string): Record<string, unknown> {
 	const result: Record<string, unknown> = {};

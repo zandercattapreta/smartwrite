@@ -195,7 +195,8 @@ export default class SmartWrite extends Plugin {
 		this.registerEvent(
 			(this.app.workspace as unknown as Events).on(
 				EVENT_PUBLISH_COMPLETE,
-				(data: { file: TFile; url: string; publishedAt: string; mode: string }) => {
+				(...args: unknown[]) => {
+					const data = args[0] as { file: TFile; url: string; publishedAt: string; mode: string };
 					void this.onPublishComplete(data);
 				},
 			),

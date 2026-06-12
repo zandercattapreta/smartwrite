@@ -11,6 +11,7 @@
 // ==============================================================================
 
 import type { SmartWriteSettings, PersonaDefinition } from "../../types";
+import { normalizePath } from "obsidian";
 import { COMMON_READER_PROMPT } from "../../personas/common-reader";
 import { CRITICAL_EDITOR_PROMPT } from "../../personas/critical-editor";
 
@@ -114,7 +115,7 @@ export class PersonaLoader {
 		vaultPath: string,
 	): Promise<PersonaDefinition | null> {
 		try {
-			const filePath = `${vaultPath.replace(/\/$/, "")}/${personaId}.md`;
+		const filePath = normalizePath(`${vaultPath}/${personaId}.md`);
 			const abstractFile = app.vault.getAbstractFileByPath(filePath);
 
 			if (!abstractFile) return null;

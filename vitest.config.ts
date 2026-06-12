@@ -1,6 +1,16 @@
 import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+	resolve: {
+		alias: {
+			// Mapeia 'obsidian' ao mock para que os testes não dependam do runtime do Obsidian
+			obsidian: path.resolve(__dirname, "tests/__mocks__/obsidian.ts"),
+		},
+	},
 	test: {
 		// Ambiente padrão: node (sem DOM — Obsidian não roda no browser em testes)
 		environment: "node",

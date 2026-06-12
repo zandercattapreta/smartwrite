@@ -107,7 +107,7 @@ export function buildHighlightExtension(settings: SmartWriteSettings): Extension
 		},
 		{
 			// Expõe as decorações ao EditorView para renderização
-			decorations: (v: { decorations: DecorationSet }) => v.decorations,
+			decorations: (v: unknown) => (v as { decorations: DecorationSet }).decorations,
 		},
 	);
 }
