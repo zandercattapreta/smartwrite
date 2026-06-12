@@ -13,7 +13,9 @@
 //   Obsidian em produção). Os tipos são resolvidos localmente via src/codemirror-*.d.ts.
 // ==============================================================================
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Decoration, ViewPlugin } from "@codemirror/view";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { RangeSetBuilder } from "@codemirror/state";
 import type { DecorationSet, EditorView, ViewUpdate } from "@codemirror/view";
 import type { Extension } from "@codemirror/state";
